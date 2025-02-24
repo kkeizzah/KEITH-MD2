@@ -37,7 +37,7 @@ const authenticationn = require("./auth.js");
 const daddy = "254748387615@s.whatsapp.net";
 
 const {
-  autoview, autoread, botname, autobio, mode, prefix, presence,
+  autoview, autoread, botname, autobio, mode, reactemoji, prefix, presence,
   mycode, author, antibad, packname, dev, antilink, gcpresence, antionce, antitag, antidelete, autolike,
 } = require("./settings");
 
@@ -90,9 +90,8 @@ async function startKeith() {
       mek.message = mek.message.ephemeralMessage?.message || mek.message;
 
       if (autoview === "true" && autolike === "true" && mek.key?.remoteJid === "status@broadcast") {
-        await client.sendMessage(mek.key.remoteJid, { react: { key: mek.key, text: "💎" } });
-      }
-
+    await client.sendMessage(mek.key.remoteJid, { react: { key: mek.key, text: reactemoji } });
+}
       if (autoview === "true" && mek.key?.remoteJid === "status@broadcast") {
         await client.readMessages([mek.key]);
       } else if (autoread === "true" && mek.key?.remoteJid.endsWith("@s.whatsapp.net")) {
