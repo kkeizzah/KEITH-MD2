@@ -123,37 +123,37 @@ async function startKeith() {
      
     const forbiddenLinkPattern = /https?:\/\/[^\s]+/;
 
-    // Check if the message contains any forbidden link, group settings allow link removal, and user is not admin
-    if (body && forbiddenLinkPattern.test(body) && m.isGroup && antilink === 'true' && !Owner && isBotAdmin && !isAdmin) {
-        if (itsMe) return;  // Skip if the message is from the bot
+// Check if the message contains any forbidden link, group settings allow link removal, and user is not admin
+if (body && forbiddenLinkPattern.test(body) && m.isGroup && antilink === 'true' && !Owner && isBotAdmin && !isAdmin) {
+    if (itsMe) return;  // Skip if the message is from the bot
 
-        const kid = m.sender;
+    const kid = m.sender;
 
-        // Notify the user that they are not allowed to send links
-        await client.sendMessage(m.chat, {
-            text: `🚫Antilink detected🚫\n\n@${kid.split("@")[0]}, do not send links!`,
-            contextInfo: { mentionedJid: [kid] }
-        }, { quoted: m });
+    // Notify the user that they are not allowed to send links
+    await client.sendMessage(m.chat, {
+        text: `🚫Antilink detected🚫\n\n@${kid.split("@")[0]}, do not send links!`,
+        contextInfo: { mentionedJid: [kid] }
+    }, { quoted: m });
 
-        // Delete the offending message
-        await client.sendMessage(m.chat, {
-            delete: {
-                remoteJid: m.chat,
-                fromMe: false,
-                id: m.key.id,
-                participant: kid
-            }
-        });
-
-        if (!isBotAdmin) {
-            await client.sendMessage(m.chat, {
-                text: 'Please promote me to an admin to  remove @${kid.split("@")[0]} for sharing link.',
-            });
-        } else {
-            await client.groupParticipantsUpdate(m.chat, [kid], 'remove');
+    // Delete the offending message
+    await client.sendMessage(m.chat, {
+        delete: {
+            remoteJid: m.chat,
+            fromMe: false,
+            id: m.key.id,
+            participant: kid
         }
+    });
+
+    if (!isBotAdmin) {
+        await client.sendMessage(m.chat, {
+            text: `Please promote me to an admin to remove @${kid.split("@")[0]} for sharing link.`,
+        });
+    } else {
+        await client.groupParticipantsUpdate(m.chat, [kid], 'remove');
     }
 }
+
  
       
     if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
