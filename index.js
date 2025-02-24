@@ -89,9 +89,7 @@ async function startKeith() {
       if (!mek.message) return;
       mek.message = mek.message.ephemeralMessage?.message || mek.message;
 
-      if (autoview === "true" && autolike === "true" && mek.key?.remoteJid === "status@broadcast") {
-    await client.sendMessage(mek.key.remoteJid, { react: { key: mek.key, text: reactemoji } });
-}
+      
       if (autoview === "true" && mek.key?.remoteJid === "status@broadcast") {
         await client.readMessages([mek.key]);
       } else if (autoread === "true" && mek.key?.remoteJid.endsWith("@s.whatsapp.net")) {
