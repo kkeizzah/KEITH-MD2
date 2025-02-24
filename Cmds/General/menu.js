@@ -115,3 +115,6 @@ module.exports = async (context) => {
         m.reply('An unexpected error occurred while generating the menu.');
     }
 };
+module.exports.description = "Interact with ChatGPT and get a response from the AI.";
+module.exports.aliases = ["list", "help", "pannel"];
+module.exports.reaction = "⚔️"; 
