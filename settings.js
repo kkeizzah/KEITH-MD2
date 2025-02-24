@@ -19,6 +19,8 @@ const sessionName = "session";
 const presence = process.env.WA_PRESENCE || 'online';
 
 const antitag = process.env.ANTITAG || 'true';
+const antilink = process.env.GROUP_CONTROL || 'true';
+const antibad = process.env.GROUP_CONTROL || 'true';
 const anticall = process.env.ANTICALL || 'true';
 const antidelete = process.env.ANTIDELETE || 'true';
 const autoview = process.env.AUTOVIEW_STATUS || 'true';
@@ -33,6 +35,8 @@ module.exports = {
   autoread,
   botname,
   autobio,
+  antilink,
+  antibad,
   mode,
   prefix,
   anticall,
