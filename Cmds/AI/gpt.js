@@ -1,19 +1,21 @@
-module.exports = async (context) => {
+module.exports = {
+  execute: async (context) => {
     const { client, m, text } = context;
 
     try {
-        if (!text) return m.reply("This is Keith assistant what is your query?");
+      if (!text) return m.reply("This is Keith assistant what is your query?");
 
-       
-        const { default: Gemini } = await import('gemini-ai');
+      const { default: Gemini } = await import('gemini-ai');
+      const gemini = new Gemini("AIzaSyBK1U4dgP9XtN6qgyB3YtMD5nsLbmM7ruM");
+      const chat = gemini.createChat();
 
-        const gemini = new Gemini("QUl6YVN5QndaN3FwYkRaZmJQVHRnV0hWMkcySk5WZW05RURLUmVF");
-        const chat = gemini.createChat();
-
-        const res = await chat.ask(text);
-
-        await m.reply(res);
+      const res = await chat.ask(text);
+      await m.reply(res);
     } catch (e) {
-        m.reply("I am unable to generate responses\n\n" + e);
+      m.reply("I am unable to generate responses\n\n" + e);
     }
+  },
+  description: "Interact with the GPT model to get responses to your queries.",
+  aliases: ["ai", "chatgpt", "assistant"], // Add your aliases here
+  reaction: "💬" // Optional: Add a reaction emoji
 };
