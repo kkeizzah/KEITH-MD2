@@ -121,7 +121,7 @@ async function startKeith() {
       const text = args.join(" ");
       const isOwner = dev.split(",").map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender);
      
-    const forbiddenLinkPattern = /https?:\/\/[^\s]+/;
+    /*const forbiddenLinkPattern = /https?:\/\/[^\s]+/;
 
 // Check if the message contains any forbidden link, group settings allow link removal, and user is not admin
 if (body && forbiddenLinkPattern.test(body) && m.isGroup && antilink === 'true' && !Owner && isBotAdmin && !isAdmin) {
@@ -206,7 +206,7 @@ if (body && forbiddenWords.some(word => body.toLowerCase().includes(word))) {
         const kid = m.sender;
         await client.updateBlockStatus(kid, 'block');
     }
-}
+}*/
 
  
       
