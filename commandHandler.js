@@ -57,6 +57,13 @@ commandFiles.forEach(file => {
     aliases: commandModule.aliases || [],
     reaction: commandModule.reaction || null, // Reaction type (if any)
   };
+
+  // Register aliases for the command
+  if (commandModule.aliases && Array.isArray(commandModule.aliases)) {
+    commandModule.aliases.forEach(alias => {
+      commands[alias] = commands[commandName];
+    });
+  }
 });
 
 // Export the loaded commands and the total command count
