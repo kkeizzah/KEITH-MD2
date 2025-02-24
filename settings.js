@@ -1,7 +1,6 @@
-/* Bot settings 
+// Bot settings
 
-You don't have to set this if you deploy using heroku because you can simply set them in environment variables, also don't forget to sleep */
-
+// You don't have to set this if you deploy using heroku because you can simply set them in environment variables, also don't forget to sleep
 
 const session = process.env.SESSION || '';
 
@@ -19,8 +18,7 @@ const sessionName = "session";
 const presence = process.env.WA_PRESENCE || 'online';
 
 const antitag = process.env.ANTITAG || 'true';
-const antilink = process.env.GROUP_CONTROL || 'true';
-const antibad = process.env.GROUP_CONTROL || 'true';
+const groupControl = process.env.GROUP_CONTROL || 'true';
 const anticall = process.env.ANTICALL || 'true';
 const antidelete = process.env.ANTIDELETE || 'true';
 const autoview = process.env.AUTOVIEW_STATUS || 'true';
@@ -35,8 +33,8 @@ module.exports = {
   autoread,
   botname,
   autobio,
-  antilink,
-  antibad,
+  antilink: groupControl,  // Use groupControl for antilink
+  antibad: groupControl,   // Use groupControl for antibad
   mode,
   prefix,
   anticall,
