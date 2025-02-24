@@ -192,22 +192,47 @@ async function startKeith() {
           await client.updateBlockStatus(kid, 'block');
         }
       }
-      if (m.isGroup === false && antispam === 'true') {
-  const messageText = m.text; // Get the message text
-  const wordCount = messageText.split(/\s+/).length; // Count words by splitting the message by spaces
+      
+      const conversationHistory = {}; // This will store recent messages for each user
 
-  if (wordCount > 5) { // If the message contains more than 5 words
-    const sender = m.sender;
+async function checkAndBlockSender(m) {
+  const sender = m.sender;
+  const messageText = m.text || '';
+  const wordsCount = messageText.trim().split(/\s+/).length; // Split by spaces and count words
 
-    // Block the sender
+  // Initialize conversation history for sender if it doesn't exist
+  if (!conversationHistory[sender]) {
+    conversationHistory[sender] = [];
+  }
+
+  // Add the current message's word count to the sender's conversation history
+  conversationHistory[sender].push(wordsCount);
+
+  // Limit history to the last 5 messages
+  if (conversationHistory[sender].length > 5) {
+    conversationHistory[sender].shift(); // Remove the oldest message to keep history at 5
+  }
+
+  // Check if the last 5 messages exceed the 5-word limit (i.e., 6 or more words in total)
+  const totalWords = conversationHistory[sender].reduce((sum, count) => sum + count, 0);
+
+  if (totalWords > 5) {
+    // Block the sender if the total word count exceeds 5
     await client.updateBlockStatus(sender, 'block');
-
-    // Notify the user that they have been blocked
     await client.sendMessage(m.chat, {
-      text: `🚫 You have been blocked due to spamming with excessive words! 🚫`,
-    }, { quoted: m });
+      text: `🚫 You have been blocked due to spamming 🚫\nYou have sent too many words in a short time.`,
+    });
   }
 }
+
+// Listen to incoming messages
+client.on('message', async (m) => {
+  // Make sure it's not a group and antispam is enabled
+  if (!m.isGroup && antispam === 'true') {
+    await checkAndBlockSender(m);
+  }
+});
+
 
       
       
