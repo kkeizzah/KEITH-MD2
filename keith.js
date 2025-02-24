@@ -11,15 +11,7 @@ const uploadtoimgur = require('./lib/Imgur')
 const ytmp3 = require('./lib/ytmp3');
 const path = require('path');
 const { commands, totalCommands } = require('./commandHandler');
-const blocked_users = require('./Functions/blocked_users');
-const status_saver = require('./Functions/status_saver');
-const eval2 = require('./Functions/eval2');
-const eval = require('./Functions/eval');
-const antiviewonce = require('./Functions/antiviewonce');
-const gcPresence = require('./Functions/gcPresence');
-const antilink = require('./Functions/antilink');
-const antitaggc = require('./Functions/antitag');
-const masterEval = require('./Functions/masterEval');
+
 
 const {
    presence, autoread, botname,
@@ -106,16 +98,7 @@ module.exports = Keith = async (client, m, chatUpdate, store) => {
     }
 
     // await antidel(client, m, store, chatUpdate, antidelete);
-    await status_saver(client, m, Owner, prefix)
-    await eval2(client, m, Owner, budy, fetchJson)
-    await eval(client, m, Owner, budy, fetchJson, store)
-    await antilink(client, m, isBotAdmin, isAdmin, Owner, body);
-    await antiviewonce(client, m, antionce);
-    await gcPresence(client, m, gcpresence);
-    await antitaggc(client, m, isBotAdmin, itsMe, isAdmin, Owner, body, antitag);
-
-    await masterEval(client, m, Owner, budy, fetchJson, store);
-
+    
     const command = cmd ? body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase() : null;
 
     if (commands[command]) {
