@@ -120,17 +120,22 @@ async function startKeith() {
       const itsMe = m.sender === botNumber;
       const text = args.join(" ");
       const isOwner = dev.split(",").map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender);
+      
+    if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
 
-      if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
-
-      const command = cmd ? body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase() : null;
-      if (command && commands[command]) {
-        await commands[command].execute({ client, m, text, args, isOwner, pushname, botNumber, itsMe, store });
+    const command = cmd ? body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase() : null;
+    if (command) {
+      const commandObj = commands[command];
+      if (commandObj) {
+        await commandObj.execute({ client, m, text, args, isOwner, pushname, botNumber, itsMe, store });
       }
-    } catch (err) {
-      console.error(err);
     }
-  });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+      
 
   process.on("unhandledRejection", (reason, promise) => {
     console.error("Unhandled Rejection at:", promise, "reason:", reason);
