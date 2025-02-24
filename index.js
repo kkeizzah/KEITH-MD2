@@ -89,7 +89,6 @@ async function startKeith() {
       if (!mek.message) return;
       mek.message = mek.message.ephemeralMessage?.message || mek.message;
 
-      
       if (autoview === "true" && mek.key?.remoteJid === "status@broadcast") {
         await client.readMessages([mek.key]);
       } else if (autoread === "true" && mek.key?.remoteJid.endsWith("@s.whatsapp.net")) {
@@ -189,71 +188,29 @@ async function startKeith() {
           await client.updateBlockStatus(kid, 'block');
         }
       }
+
+      // Save Command Logic
       const textL = m.text.toLowerCase();
-const quotedMessage = m.msg?.contextInfo?.quotedMessage;
+      const quotedMessage = m.msg?.contextInfo?.quotedMessage;
 
-if (quotedMessage && textL.startsWith(prefix + "save") && !m.quoted.chat.includes("status@broadcast")) {
-  return m.reply("You did not tag a status media to save.");
-}
+      if (quotedMessage && textL.startsWith(prefix + "save") && !m.quoted.chat.includes("status@broadcast")) {
+        return m.reply("You did not tag a status media to save.");
+      }
 
-if (Owner && quotedMessage && textL.startsWith(prefix + "save") && m.quoted.chat.includes("status@broadcast")) {
-  if (quotedMessage.imageMessage) {
-    let imageCaption = quotedMessage.imageMessage.caption;
-    let imageUrl = await client.downloadAndSaveMediaMessage(quotedMessage.imageMessage);
-    client.sendMessage(m.chat, { image: { url: imageUrl }, caption: imageCaption });
-  }
+      if (isOwner && quotedMessage && textL.startsWith(prefix + "save") && m.quoted.chat.includes("status@broadcast")) {
+        if (quotedMessage.imageMessage) {
+          let imageCaption = quotedMessage.imageMessage.caption;
+          let imageUrl = await client.downloadAndSaveMediaMessage(quotedMessage.imageMessage);
+          client.sendMessage(m.chat, { image: { url: imageUrl }, caption: imageCaption });
+        }
 
-  if (quotedMessage.videoMessage) {
-    let videoCaption = quotedMessage.videoMessage.caption;
-    let videoUrl = await client.downloadAndSaveMediaMessage(quotedMessage.videoMessage);
-    client.sendMessage(m.chat, { video: { url: videoUrl }, caption: videoCaption });
-  }
-}
+        if (quotedMessage.videoMessage) {
+          let videoCaption = quotedMessage.videoMessage.caption;
+          let videoUrl = await client.downloadAndSaveMediaMessage(quotedMessage.videoMessage);
+          client.sendMessage(m.chat, { video: { url: videoUrl }, caption: videoCaption });
+        }
+      }
 
-      
-      /*const conversationHistory = {}; // This will store recent messages for each user
-
-async function checkAndBlockSender(m) {
-  const sender = m.sender;
-  const messageText = m.text || '';
-  const wordsCount = messageText.trim().split(/\s+/).length; // Split by spaces and count words
-
-  // Initialize conversation history for sender if it doesn't exist
-  if (!conversationHistory[sender]) {
-    conversationHistory[sender] = [];
-  }
-
-  // Add the current message's word count to the sender's conversation history
-  conversationHistory[sender].push(wordsCount);
-
-  // Limit history to the last 5 messages
-  if (conversationHistory[sender].length > 5) {
-    conversationHistory[sender].shift(); // Remove the oldest message to keep history at 5
-  }
-
-  // Check if the last 5 messages exceed the 5-word limit (i.e., 6 or more words in total)
-  const totalWords = conversationHistory[sender].reduce((sum, count) => sum + count, 0);
-
-  if (totalWords > 5) {
-    // Block the sender if the total word count exceeds 5
-    await client.updateBlockStatus(sender, 'block');
-    await client.sendMessage(m.chat, {
-      text: `🚫 You have been blocked due to spamming 🚫\nYou have sent too many words in a short time.`,
-    });
-  }
-}
-
-// Listen to incoming messages
-client.on('message', async (m) => {
-  // Make sure it's not a group and antispam is enabled
-  if (!m.isGroup && antispam === 'true') {
-    await checkAndBlockSender(m);
-  }
-});*/
-
-
-      
-      
       if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
 
       const command = cmd ? body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase() : null;
@@ -264,7 +221,7 @@ client.on('message', async (m) => {
         }
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error processing message:", err);
     }
   });
 
