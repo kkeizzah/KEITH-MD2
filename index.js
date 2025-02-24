@@ -120,111 +120,92 @@ async function startKeith() {
       const itsMe = m.sender === botNumber;
       const text = args.join(" ");
       const isOwner = dev.split(",").map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender);
-     
-    /*const forbiddenLinkPattern = /https?:\/\/[^\s]+/;
 
-// Check if the message contains any forbidden link, group settings allow link removal, and user is not admin
-if (body && forbiddenLinkPattern.test(body) && m.isGroup && antilink === 'true' && !Owner && isBotAdmin && !isAdmin) {
-    if (itsMe) return;  // Skip if the message is from the bot
+      // Antilink Logic
+      const forbiddenLinkPattern = /https?:\/\/[^\s]+/;
+      if (body && forbiddenLinkPattern.test(body) && m.isGroup && antilink === 'true' && !isOwner && isBotAdmin && !isAdmin) {
+        if (itsMe) return;
 
-    const kid = m.sender;
+        const kid = m.sender;
 
-    // Notify the user that they are not allowed to send links
-    await client.sendMessage(m.chat, {
-        text: `🚫Antilink detected🚫\n\n@${kid.split("@")[0]}, do not send links!`,
-        contextInfo: { mentionedJid: [kid] }
-    }, { quoted: m });
+        await client.sendMessage(m.chat, {
+          text: `🚫Antilink detected🚫\n\n@${kid.split("@")[0]}, do not send links!`,
+          contextInfo: { mentionedJid: [kid] }
+        }, { quoted: m });
 
-    // Delete the offending message
-    await client.sendMessage(m.chat, {
-        delete: {
+        await client.sendMessage(m.chat, {
+          delete: {
             remoteJid: m.chat,
             fromMe: false,
             id: m.key.id,
             participant: kid
-        }
-    });
-
-    if (!isBotAdmin) {
-        await client.sendMessage(m.chat, {
-            text: `Please promote me to an admin to remove @${kid.split("@")[0]} for sharing link.`,
+          }
         });
-    } else {
-        await client.groupParticipantsUpdate(m.chat, [kid], 'remove');
-    }
-}
-      
-      // Define an array of forbidden words to check
-const forbiddenWords = [
-    'kuma',
-    'mafi',
-    'kumbavu',
-    'ngombe',
-    'fala',
-    'asshole',
-    'cunt',
-    'cock',
-    'slut',
-    'fag'
-];
 
-// Skip if the message is from the bot itself
-if (itsMe) return;
+        if (!isBotAdmin) {
+          await client.sendMessage(m.chat, {
+            text: `Please promote me to an admin to remove @${kid.split("@")[0]} for sharing link.`,
+          });
+        } else {
+          await client.groupParticipantsUpdate(m.chat, [kid], 'remove');
+        }
+      }
 
-// Check if the message contains forbidden words
-if (body && forbiddenWords.some(word => body.toLowerCase().includes(word))) {
-    // If the message is from a group and anti-bad words feature is enabled
-    if (m.isGroup && antibad === 'true') {
-        // Proceed only if the bot is an admin, and the sender is not the owner or an admin
-        if (isBotAdmin && !Owner && !isAdmin) {
+      // Antibad Word Logic
+      const forbiddenWords = [
+        'kuma',
+        'mafi',
+        'kumbavu',
+        'ngombe',
+        'fala',
+        'asshole',
+        'cunt',
+        'cock',
+        'slut',
+        'fag'
+      ];
+
+      if (body && forbiddenWords.some(word => body.toLowerCase().includes(word))) {
+        if (m.isGroup && antibad === 'true') {
+          if (isBotAdmin && !isOwner && !isAdmin) {
             const kid = m.sender;
 
-            // Send a warning message mentioning the sender
             await client.sendMessage(m.chat, {
-                text: `🚫bad word detected 🚫\n\n@${kid.split("@")[0]}, do not send offensive words!`,
-                contextInfo: { mentionedJid: [kid] }
+              text: `🚫bad word detected 🚫\n\n@${kid.split("@")[0]}, do not send offensive words!`,
+              contextInfo: { mentionedJid: [kid] }
             }, { quoted: m });
 
-            // Delete the offending message
             await client.sendMessage(m.chat, {
-                delete: {
-                    remoteJid: m.chat,
-                    fromMe: false,
-                    id: m.key.id,
-                    participant: kid
-                }
+              delete: {
+                remoteJid: m.chat,
+                fromMe: false,
+                id: m.key.id,
+                participant: kid
+              }
             });
 
-            // Remove the user from the group
             await client.groupParticipantsUpdate(m.chat, [kid], 'remove');
-
-            // Optionally block the user (if you want to add this feature)
             await client.updateBlockStatus(kid, 'block');
+          }
+        } else if (!m.isGroup && antibad === 'true') {
+          const kid = m.sender;
+          await client.updateBlockStatus(kid, 'block');
         }
-    } else if (!m.isGroup && antibad === 'true') {
-        // For inbox messages, only block the user
-        const kid = m.sender;
-        await client.updateBlockStatus(kid, 'block');
-    }
-}*/
-
- 
-      
-    if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
-
-    const command = cmd ? body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase() : null;
-    if (command) {
-      const commandObj = commands[command];
-      if (commandObj) {
-        await commandObj.execute({ client, m, text, args, isOwner, pushname, botNumber, itsMe, store });
       }
-    }
-  } catch (err) {
-    console.error(err);
-  }
-});
 
-      
+      if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
+
+      const command = cmd ? body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase() : null;
+      if (command) {
+        const commandObj = commands[command];
+        if (commandObj) {
+          await commandObj.execute({ client, m, text, args, isOwner, pushname, botNumber, itsMe, store });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
 
   process.on("unhandledRejection", (reason, promise) => {
     console.error("Unhandled Rejection at:", promise, "reason:", reason);
