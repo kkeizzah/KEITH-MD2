@@ -16,7 +16,7 @@ const gcpresence = process.env.GC_PRESENCE || 'false';
 const antionce = process.env.ANTIVIEWONCE || 'true';
 const sessionName = "session";
 const presence = process.env.WA_PRESENCE || 'online';
-
+const antispam = process.env.ANTISPAM || 'true';
 const antitag = process.env.ANTITAG || 'true';
 const groupControl = process.env.GROUP_CONTROL || 'true';
 const anticall = process.env.ANTICALL || 'true';
@@ -32,6 +32,7 @@ module.exports = {
   autoview,
   autoread,
   botname,
+  antispam,
   autobio,
   antilink: groupControl,  // Use groupControl for antilink
   antibad: groupControl,   // Use groupControl for antibad
