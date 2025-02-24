@@ -115,3 +115,6 @@ module.exports = async (context) => {
         m.reply('An unexpected error occurred while generating the menu.');
     }
 };
+module.exports.description = "Displays the bot's command menu.";
+module.exports.aliases = ["list", "help", "pannel"];
+module.exports.reaction = "⚔️"
