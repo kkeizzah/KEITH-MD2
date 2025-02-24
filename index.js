@@ -193,7 +193,7 @@ async function startKeith() {
         }
       }
       
-      const conversationHistory = {}; // This will store recent messages for each user
+      /*const conversationHistory = {}; // This will store recent messages for each user
 
 async function checkAndBlockSender(m) {
   const sender = m.sender;
@@ -231,7 +231,7 @@ client.on('message', async (m) => {
   if (!m.isGroup && antispam === 'true') {
     await checkAndBlockSender(m);
   }
-});
+});*/
 
 
       
