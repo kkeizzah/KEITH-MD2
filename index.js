@@ -15,16 +15,32 @@ const { exec } = require("child_process");
 const chalk = require("chalk");
 const express = require("express");
 const { DateTime } = require("luxon");
+const util = require("util");
+const speed = require("performance-now");
+
+const {
+  smsg, formatp, tanggal, formatDate, getTime, sleep, clockString,
+  fetchJson, getBuffer, jsonformat, generateProfilePicture, parseMention,
+  getRandom, fetchBuffer,
+} = require("./lib/botFunctions.js");
+
+const { TelegraPh, UploadFileUgu } = require("./lib/toUrl");
+const uploadtoimgur = require("./lib/Imgur");
+const ytmp3 = require("./lib/ytmp3");
+const path = require("path");
+const { commands, totalCommands } = require("./commandHandler");
 
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require("./lib/exif");
-const { getBuffer, fetchJson, sleep } = require("./lib/botFunctions");
 const store = makeInMemoryStore({ logger: pino().child({ level: "silent", stream: "store" }) });
 
 const authenticationn = require("./auth.js");
-const { smsg } = require("./smsg");
+const daddy = "254748387615@s.whatsapp.net";
 
-const { autoview, autoread, botname, autobio, mode, prefix, presence, autolike } = require("./settings");
-const { commands, totalCommands } = require("./commandHandler");
+const {
+  autoview, autoread, botname, autobio, mode, prefix, presence,
+  mycode, author, packname, dev, gcpresence, antionce, antitag, antidelete, autolike,
+} = require("./settings");
+
 const groupEvents = require("./groupEvents.js");
 
 authenticationn();
@@ -91,7 +107,26 @@ async function startKeith() {
       if (!client.public && !mek.key.fromMe && chatUpdate.type === "notify") return;
 
       const m = smsg(client, mek, store);
-      require("./keith")(client, m, chatUpdate, store);
+
+      // Command Handler Logic
+      const body = m.mtype === "conversation" ? m.message.conversation :
+                   m.mtype === "imageMessage" ? m.message.imageMessage.caption :
+                   m.mtype === "extendedTextMessage" ? m.message.extendedTextMessage.text : "";
+
+      const cmd = body.startsWith(prefix);
+      const args = body.trim().split(/ +/).slice(1);
+      const pushname = m.pushName || "No Name";
+      const botNumber = await client.decodeJid(client.user.id);
+      const itsMe = m.sender === botNumber;
+      const text = args.join(" ");
+      const isOwner = dev.split(",").map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender);
+
+      if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
+
+      const command = cmd ? body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase() : null;
+      if (command && commands[command]) {
+        await commands[command]({ client, m, text, args, isOwner, pushname, botNumber, itsMe, store });
+      }
     } catch (err) {
       console.error(err);
     }
@@ -163,7 +198,7 @@ async function startKeith() {
       const message = `Holla, ${getGreeting()},\n\n╭═══『𝐊𝐞𝐢𝐭𝐡 𝐌𝐝 𝐢𝐬 𝐜𝐨𝐧𝐧𝐞𝐜𝐭𝐞𝐝』══⊷ \n` +
         `║ ʙᴏᴛ ɴᴀᴍᴇ ${botname}\n` +
         `║ ᴍᴏᴅᴇ ${mode}\n` +
-        `║ �ᴘʀᴇғɪx [  ${prefix} ]\n` +
+        `║ ᴘʀᴇғɪx [  ${prefix} ]\n` +
         `║ ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴs ${totalCommands}\n` +
         `║ ᴛɪᴍᴇ ${DateTime.now().setZone("Africa/Nairobi").toLocaleString(DateTime.TIME_SIMPLE)}\n` +
         `║ ʟɪʙʀᴀʀʏ Baileys\n` +
