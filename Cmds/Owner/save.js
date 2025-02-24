@@ -1,13 +1,3 @@
-/*   Fortunatus :v
-
-What's The Point Of This Code ? */
-
-const ownerMiddleware = require('../../utility/botUtil/Ownermiddleware'); 
-
+/*what is the essential of this code 😔🗡️⚔️*/
 module.exports = async (context) => {
-    await ownerMiddleware(context, async () => {
-        const { client, m, Owner } = context;
-
-})
-
-}
+    const { client, m } = context;
