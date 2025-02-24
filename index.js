@@ -38,7 +38,7 @@ const daddy = "254748387615@s.whatsapp.net";
 
 const {
   autoview, autoread, botname, autobio, mode, prefix, presence,
-  mycode, author, packname, dev, gcpresence, antionce, antitag, antidelete, autolike,
+  mycode, author, packname, dev, antilink, gcpresence, antionce, antitag, antidelete, autolike,
 } = require("./settings");
 
 const groupEvents = require("./groupEvents.js");
