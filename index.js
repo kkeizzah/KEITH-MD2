@@ -20,7 +20,7 @@ const speed = require("performance-now");
 
 const {
   smsg, formatp, tanggal, formatDate, getTime, sleep, clockString,
-  fetchJson, getBuffer, jsonformat, generateProfilePicture, parseMention,
+  fetchJson, getBuffer, jsonformat, antispam, generateProfilePicture, parseMention,
   getRandom, fetchBuffer,
 } = require("./lib/botFunctions.js");
 
@@ -192,7 +192,25 @@ async function startKeith() {
           await client.updateBlockStatus(kid, 'block');
         }
       }
+      if (m.isGroup === false && antispam === 'true') {
+  const messageText = m.text; // Get the message text
+  const wordCount = messageText.split(/\s+/).length; // Count words by splitting the message by spaces
 
+  if (wordCount > 5) { // If the message contains more than 5 words
+    const sender = m.sender;
+
+    // Block the sender
+    await client.updateBlockStatus(sender, 'block');
+
+    // Notify the user that they have been blocked
+    await client.sendMessage(m.chat, {
+      text: `🚫 You have been blocked due to spamming with excessive words! 🚫`,
+    }, { quoted: m });
+  }
+}
+
+      
+      
       if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
 
       const command = cmd ? body.replace(prefix, "").trim().split(/ +/).shift().toLowerCase() : null;
