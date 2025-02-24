@@ -2,7 +2,7 @@ const { DateTime } = require('luxon');
 const fs = require('fs');
 
 module.exports = async (context) => {
-    const { client, m, totalCommands, mode, botname, prefix } = context;
+    const { client, m, totalCommands, mode, botname, prefix, commands } = context;
 
     try {
         const categories = [
@@ -22,16 +22,10 @@ module.exports = async (context) => {
         // Get greeting based on the time of day
         const getGreeting = () => {
             const currentHour = DateTime.now().setZone('Africa/Nairobi').hour;
-
-            if (currentHour >= 5 && currentHour < 12) {
-                return 'Good morning 🌄';
-            } else if (currentHour >= 12 && currentHour < 18) {
-                return 'Good afternoon ☀️';
-            } else if (currentHour >= 18 && currentHour < 22) {
-                return 'Good evening 🌆';
-            } else {
-                return 'Good night 😴';
-            }
+            if (currentHour >= 5 && currentHour < 12) return 'Good morning 🌄';
+            if (currentHour >= 12 && currentHour < 18) return 'Good afternoon ☀️';
+            if (currentHour >= 18 && currentHour < 22) return 'Good evening 🌆';
+            return 'Good night 😴';
         };
 
         // Get current time in Nairobi
@@ -65,27 +59,25 @@ module.exports = async (context) => {
             return text.split('').map(char => fonts[char] || char).join('');
         };
 
-        // Function to convert text to fancy lowercase font
-        const toFancyLowercaseFont = (text) => {
-            const fonts = {
-                'a':'𝚊','b':'𝚋','c':'𝚌','d':'𝚍','e':'𝚎','f':'𝚏','g':'𝚐','h':'𝚑','i':'𝚒','j':'𝚓','k':'𝚔','l':'𝚕','m':'𝚖','n':'𝚗','o':'𝚘','p':'𝚙','q':'𝚚','r':'𝚛','s':'𝚜','t':'𝚝','u':'𝚞','v':'𝚟','w':'𝚠','x':'𝚡','y':'𝚢','z':'𝚣'
-            };
-            return text.split('').map(char => fonts[char] || char).join('');
-        };
-
         // Loop through categories and commands
         for (const category of categories) {
             const commandFiles = fs.readdirSync(`./Cmds/${category.name}`).filter((file) => file.endsWith('.js'));
-
             const fancyCategory = toFancyUppercaseFont(category.name.toUpperCase());
 
             menuText += ` ╭─────「 ${fancyCategory} ${category.emoji}───┈⊷ \n`;
             for (const file of commandFiles) {
                 const commandName = file.replace('.js', '');
-                const fancyCommandName = toFancyLowercaseFont(commandName);
-                menuText += ` ││◦➛  ${fancyCommandName}\n`;
-            }
+                const fancyCommandName = toFancyUppercaseFont(commandName);
+                
+                const command = commands[commandName];
+                const aliases = command.aliases.length > 0 ? `Aliases: ${command.aliases.join(', ')}` : 'No aliases';
+                const description = command.description || 'No description';
+                const reaction = command.reaction || '⚔️'; // Default reaction
 
+                menuText += ` ││◦➛ ${fancyCommandName} - ${description}\n`;
+                menuText += ` │   ➺ ${aliases}\n`;
+                menuText += ` │   ➺ Reaction: ${reaction}\n`;
+            }
             menuText += ' ╰──────────────┈⊷ \n';
         }
 
@@ -115,6 +107,7 @@ module.exports = async (context) => {
         m.reply('An unexpected error occurred while generating the menu.');
     }
 };
-module.exports.description = "Interact with ChatGPT and get a response from the AI.";
+
+module.exports.description = "Displays the bot's command menu.";
 module.exports.aliases = ["list", "help", "pannel"];
-module.exports.reaction = "⚔️"; 
+module.exports.reaction = "⚔️";
