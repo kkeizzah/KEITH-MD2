@@ -17,6 +17,7 @@ const antionce = process.env.ANTIVIEWONCE || 'true';
 const sessionName = "session";
 const presence = process.env.WA_PRESENCE || 'online';
 const antispam = process.env.ANTISPAM || 'true';
+const reactemoji = process.env.EMOJI || '💚';
 const antitag = process.env.ANTITAG || 'true';
 const groupControl = process.env.GROUP_CONTROL || 'true';
 const anticall = process.env.ANTICALL || 'true';
@@ -32,6 +33,7 @@ module.exports = {
   autoview,
   autoread,
   botname,
+  reactemoji,
   antispam,
   autobio,
   antilink: groupControl,  // Use groupControl for antilink
