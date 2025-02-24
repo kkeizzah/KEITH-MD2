@@ -29,7 +29,7 @@ module.exports = async (messageContext) => {
     message.reply("A moment, Keith is analyzing the contents of the image...");
 
     // Initialize the Google Generative AI client
-    const googleAIClient = new GoogleGenerativeAI("AIzaSyC3sNClbdraGrS2ubb5PTdnm_RbUANtdzc");
+    const googleAIClient = new GoogleGenerativeAI("AIzaSyDJUtskTG-MvQdlT4tNE319zBqLMFei8nQ");
 
     // Helper function to fetch the image as base64
     async function getImageBase64(imageURL, mimeType) {
