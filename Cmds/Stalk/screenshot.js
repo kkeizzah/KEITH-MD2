@@ -1,7 +1,8 @@
 const { getContextInfo, sendReply } = require(__dirname + "/../../lib/context"); //
+const { botname } = require(__dirname + "/../../settings");
 module.exports = async (context) => {
 
-const { client, m, text, botname } = context;
+const { client, m, text } = context;
 
 
 
