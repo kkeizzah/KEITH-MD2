@@ -229,7 +229,7 @@ client.ev.on('call', async (callData) => {
       }
 
       // Save Command Logic
-      const textL = m.text.toLowerCase();
+     /* const textL = m.text.toLowerCase();
       const quotedMessage = m.msg?.contextInfo?.quotedMessage;
 
       if (quotedMessage && textL.startsWith(prefix + "save") && !m.quoted.chat.includes("status@broadcast")) {
@@ -248,7 +248,7 @@ client.ev.on('call', async (callData) => {
           let videoUrl = await client.downloadAndSaveMediaMessage(quotedMessage.videoMessage);
           client.sendMessage(m.chat, { video: { url: videoUrl }, caption: videoCaption });
         }
-      }
+      }*/
 
       if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
 
