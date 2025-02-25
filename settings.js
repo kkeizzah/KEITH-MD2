@@ -25,6 +25,7 @@ const antidelete = process.env.ANTIDELETE || 'true';
 const autoview = process.env.AUTOVIEW_STATUS || 'true';
 const autolike = process.env.AUTOLIKE_STATUS || 'true';
 const autoread = process.env.AUTOREAD || 'true';
+const anticallmsg = process.env.ANTICALL_MSG || 'Keith declined your 🤙 call';
 const autobio = process.env.AUTOBIO || 'false';
 
 module.exports = {
@@ -42,6 +43,7 @@ module.exports = {
   prefix,
   anticall,
   autolike,
+  anticallmsg,
   mycode,
   author,
   packname,
