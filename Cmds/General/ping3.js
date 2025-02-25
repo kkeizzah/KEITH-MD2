@@ -3,27 +3,24 @@ const speed = require("performance-now");
 module.exports = async (context) => {
     const { client, m } = context;
 
-    try {
-        // Get the current timestamp and calculate Keith's speed
-        const timestamp = speed();
-        const Keithspeed = speed() - timestamp;
+    // Get the current timestamp and calculate Keith's speed
+    const timestamp = speed();
+    const Keithspeed = speed() - timestamp;
 
-        let fgg = {
-            key: { fromMe: false, participant: `0@s.whatsapp.net`, remoteJid: 'status@broadcast' },
-            message: {
-                contactMessage: {
-                    displayName: `Keith`,
-                    vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;a,;;;\nFN:Keith\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
-                },
+    let fgg = {
+        key: { fromMe: false, participant: `0@s.whatsapp.net`, remoteJid: 'status@broadcast' },
+        message: {
+            contactMessage: {
+                displayName: `Keith`,
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;a,;;;\nFN:'Keith'\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
             },
-        };
+        },
+    };
 
-        // First, send the fgg message (this only happens once)
-        await client.sendMessage(m.chat, fgg);
-
-        // Now send the ping message with the context information
+    try {
+        // Send the message with the speed data and context info
         await client.sendMessage(m.chat, { 
-            text: `${Keithspeed.toFixed(4)} m/s`, 
+            text: `𝖐𝖊𝖎𝖙𝖍 𝖘𝖕𝖊𝖊𝖉\n${Keithspeed.toFixed(4)} m/s`, 
             contextInfo: {
                 mentionedJid: [m.sender],
                 forwardingScore: 999,
@@ -34,10 +31,9 @@ module.exports = async (context) => {
                     serverMessageId: 143
                 }
             }
-        }, { quoted: fgg });
-
+        }, { quoted: m });
     } catch (error) {
         console.error("Error sending message:", error);
-        m.reply('An error occurred while sending the menu.');
+        m.reply('An error occurred while sending the message.');
     }
 };
