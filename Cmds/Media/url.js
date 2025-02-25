@@ -1,5 +1,5 @@
 module.exports = async (context) => {
-    const { client, m, uploadtoimgur } = context;
+    const { client, m } = context;
  const fs = require("fs");
 const path = require('path');
 
