@@ -147,6 +147,7 @@ async function startKeith() {
       const args = body.trim().split(/ +/).slice(1);
       const pushname = m.pushName || "No Name";
       const botNumber = await client.decodeJid(client.user.id);
+      const isBotMessage = m.sender === botNumber;  
       const itsMe = m.sender === botNumber;
       const text = args.join(" ");
       const isOwner = dev.split(",").map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender);
