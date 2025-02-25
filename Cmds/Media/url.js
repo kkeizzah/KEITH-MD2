@@ -1,4 +1,5 @@
-const uploadtoimgur = require(__dirname + "/../lib/Imgur");
+const uploadtoimgur = require(__dirname + "/../../lib/Imgur");
+
 const fs = require("fs");
 const path = require("path");
 const util = require("util");
