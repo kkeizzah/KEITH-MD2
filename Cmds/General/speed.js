@@ -19,7 +19,7 @@ module.exports = async (context) => {
     };
 
     // Send the ping message and calculate its speed
-    let pingMsg = await client.sendMessage(m.chat, { text: 'SPEED...' }, { quoted: fgg });
+    let pingMsg = await client.sendMessage(m.chat, { text: 'n${Keithspeed.toFixed(4)} m/s..' }, { quoted: fgg });
 
     try {
         // Prepare the response text with speed data and pingMsg
