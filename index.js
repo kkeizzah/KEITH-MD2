@@ -193,6 +193,14 @@ async function startKeith() {
       const isAdmin = m.isGroup ? groupAdmin.includes(m.sender) : false;
 
       const IsGroup = m.chat?.endsWith("@g.us");
+       
+      const context = {
+        client, m, text, isBotMessage, Owner, chatUpdate, store, isBotAdmin, isOwner, isAdmin, IsGroup,
+        participants, pushname, body, budy, totalCommands, args, mime, qmsg, msgKeith, botNumber, itsMe, packname,
+        author, generateProfilePicture, groupMetadata, Keithspeed, mycode, fetchJson, exec, antibad, getRandom, UploadFileUgu,
+        TelegraPh, prefix, cmd, botname, mode, antitag, antilink, antidelete, antionce, fetchBuffer,
+        store, uploadtoimgur, chatUpdate, ytmp3, getGroupAdmins, Tag
+      };
 
 
       // Antilink Logic
