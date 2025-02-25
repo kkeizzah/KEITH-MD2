@@ -1,12 +1,9 @@
 const {
-  default: KeithConnect,
-  useMultiFileAuthState,
-  DisconnectReason,
-  makeInMemoryStore,
-  downloadContentFromMessage,
-  jidDecode,
-  proto,
+  BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent,
+  generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType, useMultiFileAuthState,
+  DisconnectReason, makeInMemoryStore, downloadContentFromMessage, jidDecode
 } = require("@whiskeysockets/baileys");
+
 const pino = require("pino");
 const { Boom } = require("@hapi/boom");
 const fs = require("fs");
@@ -82,31 +79,30 @@ async function startKeith() {
       );
     }, 10 * 1000);
   }
-  
-let lastTextTime = 0;
-const messageDelay = 5000;
 
-// Handle incoming calls if anticall is enabled
-client.ev.on('call', async (callData) => {
+  let lastTextTime = 0;
+  const messageDelay = 5000;
+
+  // Handle incoming calls if anticall is enabled
+  client.ev.on('call', async (callData) => {
     if (anticall === 'true') {
-        const callId = callData[0].id;
-        const callerId = callData[0].from;
+      const callId = callData[0].id;
+      const callerId = callData[0].from;
 
-        // Reject the call
-        await client.rejectCall(callId, callerId);
+      // Reject the call
+      await client.rejectCall(callId, callerId);
 
-        const currentTime = Date.now();
-        if (currentTime - lastTextTime >= messageDelay) {
-            await client.sendMessage(callerId, {
-                text: anticallmsg
-            });
-            lastTextTime = currentTime;
-        } else {
-            console.log('Message skipped to prevent overflow');
-        }
+      const currentTime = Date.now();
+      if (currentTime - lastTextTime >= messageDelay) {
+        await client.sendMessage(callerId, {
+          text: anticallmsg
+        });
+        lastTextTime = currentTime;
+      } else {
+        console.log('Message skipped to prevent overflow');
+      }
     }
-});
-
+  });
 
   client.ev.on("messages.upsert", async (chatUpdate) => {
     try {
@@ -116,11 +112,10 @@ client.ev.on('call', async (callData) => {
 
       if (autoview === "true" && mek.key?.remoteJid === "status@broadcast") {
         await client.readMessages([mek.key]);
-        
       } else if (autoread === "true" && mek.key?.remoteJid.endsWith("@s.whatsapp.net")) {
         await client.readMessages([mek.key]);
       }
-       if (autoview === 'true' && autolike === 'true' && mek.key && mek.key.remoteJid === "status@broadcast") {
+      if (autoview === 'true' && autolike === 'true' && mek.key && mek.key.remoteJid === "status@broadcast") {
         const keithlike = await client.decodeJid(client.user.id);
         const emojis = ['😂', '😥', '😇', '🥹', '💥', '💯', '🔥', '💫', '👽', '💗', '❤️‍🔥', '👁️', '👀', '🙌', '🙆', '🌟', '💧', '🎇', '🎆', '♂️', '✅'];
         const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
@@ -145,8 +140,8 @@ client.ev.on('call', async (callData) => {
 
       // Command Handler Logic
       const body = m.mtype === "conversation" ? m.message.conversation :
-                   m.mtype === "imageMessage" ? m.message.imageMessage.caption :
-                   m.mtype === "extendedTextMessage" ? m.message.extendedTextMessage.text : "";
+        m.mtype === "imageMessage" ? m.message.imageMessage.caption :
+          m.mtype === "extendedTextMessage" ? m.message.extendedTextMessage.text : "";
 
       const cmd = body.startsWith(prefix);
       const args = body.trim().split(/ +/).slice(1);
@@ -155,6 +150,56 @@ client.ev.on('call', async (callData) => {
       const itsMe = m.sender === botNumber;
       const text = args.join(" ");
       const isOwner = dev.split(",").map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender);
+      const Tag = m.mtype === "extendedTextMessage" && m.message.extendedTextMessage.contextInfo != null
+        ? m.message.extendedTextMessage.contextInfo.mentionedJid
+        : [];
+
+      let msgKeith = m.message.extendedTextMessage?.contextInfo?.quotedMessage;
+      let budy = typeof m.text === "string" ? m.text : "";
+
+      const timestamp = speed();
+      const Keithspeed = speed() - timestamp;
+
+      const getGroupAdmins = (participants) => {
+        let admins = [];
+        for (let i of participants) {
+          if (i.admin === "superadmin") admins.push(i.id);
+          if (i.admin === "admin") admins.push(i.id);
+        }
+        return admins || [];
+      };
+
+      const keizzah = m.quoted || m;
+      const quoted = keizzah.mtype === 'buttonsMessage' ? keizzah[Object.keys(keizzah)[1]] :
+        keizzah.mtype === 'templateMessage' ? keizzah.hydratedTemplate[Object.keys(keizzah.hydratedTemplate)[1]] :
+          keizzah.mtype === 'product' ? keizzah[Object.keys(keizzah)[0]] : m.quoted ? m.quoted : m;
+
+      const color = (text, color) => {
+        return color ? chalk.keyword(color)(text) : chalk.green(text);
+      };
+
+      const mime = quoted.mimetype || "";
+      const qmsg = quoted;
+
+      const DevKeith = dev.split(",");
+      const Owner = DevKeith.map(v => v.replace(/[^0-9]/g, "") + "@s.whatsapp.net").includes(m.sender);
+
+      const groupMetadata = m.isGroup ? await client.groupMetadata(m.chat).catch(() => {}) : "";
+      const groupName = m.isGroup && groupMetadata ? groupMetadata.subject : "";
+      const participants = m.isGroup && groupMetadata ? groupMetadata.participants : [];
+      const groupAdmin = m.isGroup ? getGroupAdmins(participants) : [];
+      const isBotAdmin = m.isGroup ? groupAdmin.includes(botNumber) : false;
+      const isAdmin = m.isGroup ? groupAdmin.includes(m.sender) : false;
+
+      const IsGroup = m.chat?.endsWith("@g.us");
+
+      const context = {
+        client, m, text, isBotMessage, message, Owner, chatUpdate, store, isBotAdmin, isAdmin, IsGroup,
+        participants, pushname, body, budy, totalCommands, args, mime, qmsg, msgKeith, botNumber, itsMe, packname,
+        author, generateProfilePicture, groupMetadata, Keithspeed, mycode, fetchJson, exec, antibad, getRandom, UploadFileUgu,
+        TelegraPh, prefix, cmd, botname, mode, gcpresence, antibot, permit, antitag, antilink, antidelete, antionce, fetchBuffer,
+        store, uploadtoimgur, chatUpdate, ytmp3, getGroupAdmins, Tag
+      };
 
       // Antilink Logic
       const forbiddenLinkPattern = /https?:\/\/[^\s]+/;
@@ -227,28 +272,6 @@ client.ev.on('call', async (callData) => {
           await client.updateBlockStatus(kid, 'block');
         }
       }
-
-      // Save Command Logic
-     /* const textL = m.text.toLowerCase();
-      const quotedMessage = m.msg?.contextInfo?.quotedMessage;
-
-      if (quotedMessage && textL.startsWith(prefix + "save") && !m.quoted.chat.includes("status@broadcast")) {
-        return m.reply("You did not tag a status media to save.");
-      }
-
-      if (isOwner && quotedMessage && textL.startsWith(prefix + "save") && m.quoted.chat.includes("status@broadcast")) {
-        if (quotedMessage.imageMessage) {
-          let imageCaption = quotedMessage.imageMessage.caption;
-          let imageUrl = await client.downloadAndSaveMediaMessage(quotedMessage.imageMessage);
-          client.sendMessage(m.chat, { image: { url: imageUrl }, caption: imageCaption });
-        }
-
-        if (quotedMessage.videoMessage) {
-          let videoCaption = quotedMessage.videoMessage.caption;
-          let videoUrl = await client.downloadAndSaveMediaMessage(quotedMessage.videoMessage);
-          client.sendMessage(m.chat, { video: { url: videoUrl }, caption: videoCaption });
-        }
-      }*/
 
       if (cmd && mode === "private" && !itsMe && !isOwner && m.sender !== daddy) return;
 
@@ -329,7 +352,7 @@ client.ev.on('call', async (callData) => {
 
       const message = `Holla, ${getGreeting()},\n\n╭═══『𝐊𝐞𝐢𝐭𝐡 𝐌𝐝 𝐢𝐬 𝐜𝐨𝐧𝐧𝐞𝐜𝐭𝐞𝐝』══⊷ \n` +
         `║ ʙᴏᴛ ɴᴀᴍᴇ ${botname}\n` +
-        `║ ᴍᴏᴅᴇ ${mode}\n` +
+        `║ �ᴍᴏᴅᴇ ${mode}\n` +
         `║ ᴘʀᴇғɪx [  ${prefix} ]\n` +
         `║ ᴛᴏᴛᴀʟ ᴘʟᴜɢɪɴs ${totalCommands}\n` +
         `║ ᴛɪᴍᴇ ${DateTime.now().setZone("Africa/Nairobi").toLocaleString(DateTime.TIME_SIMPLE)}\n` +
