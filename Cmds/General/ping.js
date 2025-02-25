@@ -1,5 +1,8 @@
-module.exports = async (context) => {
+
+async function handleMessageSpeed(context) {
     const { client, m } = context;
+    const timestamp = speed();
+    const Keithspeed = speed() - timestamp;    
 
     try {
         // Prepare the response text with speed data
@@ -23,4 +26,5 @@ module.exports = async (context) => {
         console.error("Error sending message:", error);
         m.reply('An error occurred while sending the menu.');
     }
-};
+}
+ 
