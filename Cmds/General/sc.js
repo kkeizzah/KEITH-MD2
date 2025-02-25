@@ -1,3 +1,5 @@
+const { getContextInfo, sendReply } = require(__dirname + "/../../lib/context"); // // Import sendReply from context.js
+
 module.exports = async (context) => {
   const { client, m } = context;
 
@@ -35,11 +37,9 @@ module.exports = async (context) => {
       ╰───────────────────
     `;
 
-    // Send the generated message to the user
-    await client.sendMessage(m.chat, {
-      text: messageCaption,
+    // Send the generated message to the user with contextInfo
+    await sendReply(client, m, messageCaption, {
       contextInfo: {
-        mentionedJid: [m.sender], // Mention the sender
         externalAdReply: {
           title: "🌟 𝐊𝐄𝐈𝐓𝐇-𝐌𝐃 ✨",
           body: "𝐫𝐞𝐠𝐚𝐫𝐝𝐬 𝐊𝐞𝐢𝐭𝐡𝐤𝐞𝐢𝐳𝐳𝐚𝐡",
@@ -52,6 +52,6 @@ module.exports = async (context) => {
 
   } catch (error) {
     console.error("Error:", error);
-    m.reply('An unexpected error occurred while generating the repo information.');
+    await sendReply(client, m, 'An unexpected error occurred while generating the repo information.'); // Use sendReply for error messages
   }
 };
