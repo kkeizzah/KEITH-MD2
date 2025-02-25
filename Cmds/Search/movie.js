@@ -1,46 +1,52 @@
-module.exports = async (context) => {
-
-const { client, m, text } = context;
-
 const axios = require("axios");
+const { sendReply, sendMediaMessage } = require(__dirname + "/../../lib/context"); //
 
-if (!text) return m.reply("Provide a movie name or TV show");
+module.exports = async (context) => {
+    const { client, m, text } = context;
 
-try {
+    // Check if text is provided
+    if (!text) {
+        return sendReply(client, m, "Provide a movie name or TV show"); // Use sendReply for text replies
+    }
 
-              let fids = await axios.get(`http://www.omdbapi.com/?apikey=742b2d09&t=${text}&plot=full`);  
-              let imdbt = "";  
-              
-              imdbt += "⚍⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚍\n" + " ``` IMDB MOVIE SEARCH```\n" + "⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎\n";  
-              imdbt += "🎬Title      : " + fids.data.Title + "\n";  
-              imdbt += "📅Year       : " + fids.data.Year + "\n";  
-              imdbt += "⭐Rated      : " + fids.data.Rated + "\n";  
-              imdbt += "📆Released   : " + fids.data.Released + "\n";  
-              imdbt += "⏳Runtime    : " + fids.data.Runtime + "\n";  
-              imdbt += "🌀Genre      : " + fids.data.Genre + "\n";  
-              imdbt += "👨🏻‍💻Director   : " + fids.data.Director + "\n";  
-              imdbt += "✍Writer     : " + fids.data.Writer + "\n";  
-              imdbt += "👨Actors     : " + fids.data.Actors + "\n";  
-              imdbt += "📃Plot       : " + fids.data.Plot + "\n";  
-              imdbt += "🌐Language   : " + fids.data.Language + "\n";  
-              imdbt += "🌍Country    : " + fids.data.Country + "\n";  
-              imdbt += "🎖️Awards     : " + fids.data.Awards + "\n";  
-              imdbt += "📦BoxOffice  : " + fids.data.BoxOffice + "\n";  
-              imdbt += "🏙️Production : " + fids.data.Production + "\n";  
-              imdbt += "🌟imdbRating : " + fids.data.imdbRating + "\n";  
-              imdbt += "❎imdbVotes  : " + fids.data.imdbVotes + "";  
-             await client.sendMessage(m.chat, {  
-                  image: {  
-                      url: fids.data.Poster,  
-                  },  
-                  caption: imdbt,  
-              },  
-                 { quoted: m }); 
+    try {
+        // Fetch movie data from OMDB API
+        const fids = await axios.get(`http://www.omdbapi.com/?apikey=742b2d09&t=${text}&plot=full`);
 
-} catch (e) {
+        // Check if the movie data is valid
+        if (!fids.data || !fids.data.Title) {
+            return sendReply(client, m, "I cannot find that movie."); // Use sendReply for error messages
+        }
 
-m.reply("I cannot find that movie\n\n" + e)
+        // Construct the movie information message
+        let imdbt = "";
+        imdbt += "⚍⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚍\n" + " ``` IMDB MOVIE SEARCH```\n" + "⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎\n";
+        imdbt += "🎬Title      : " + fids.data.Title + "\n";
+        imdbt += "📅Year       : " + fids.data.Year + "\n";
+        imdbt += "⭐Rated      : " + fids.data.Rated + "\n";
+        imdbt += "📆Released   : " + fids.data.Released + "\n";
+        imdbt += "⏳Runtime    : " + fids.data.Runtime + "\n";
+        imdbt += "🌀Genre      : " + fids.data.Genre + "\n";
+        imdbt += "👨🏻‍💻Director   : " + fids.data.Director + "\n";
+        imdbt += "✍Writer     : " + fids.data.Writer + "\n";
+        imdbt += "👨Actors     : " + fids.data.Actors + "\n";
+        imdbt += "📃Plot       : " + fids.data.Plot + "\n";
+        imdbt += "🌐Language   : " + fids.data.Language + "\n";
+        imdbt += "🌍Country    : " + fids.data.Country + "\n";
+        imdbt += "🎖️Awards     : " + fids.data.Awards + "\n";
+        imdbt += "📦BoxOffice  : " + fids.data.BoxOffice + "\n";
+        imdbt += "🏙️Production : " + fids.data.Production + "\n";
+        imdbt += "🌟imdbRating : " + fids.data.imdbRating + "\n";
+        imdbt += "❎imdbVotes  : " + fids.data.imdbVotes + "";
 
-}
+        // Send the movie poster and information
+        await sendMediaMessage(client, m, {
+            image: { url: fids.data.Poster },
+            caption: imdbt
+        });
 
-}
+    } catch (e) {
+        console.error("Error occurred:", e);
+        await sendReply(client, m, "I cannot find that movie\n\n" + e); // Use sendReply for error messages
+    }
+};
