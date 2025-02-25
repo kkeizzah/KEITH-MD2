@@ -1,12 +1,14 @@
-
-async function handleMessageSpeed(context) {
+module.exports = async (context) => {
     const { client, m } = context;
+
+    // Assuming 'speed' is a function that returns the current timestamp or a similar value.
+    const speed = () => new Date().getTime();  // Example of a simple speed function (current timestamp in ms)
     const timestamp = speed();
-    const Keithspeed = speed() - timestamp;    
+    const Keithspeed = speed() - timestamp;
 
     try {
         // Prepare the response text with speed data
-        const menuText = `𝖐𝖊𝖎𝖙𝖍 𝖘𝖕𝖊𝖊𝖉\n${Keithspeed.toFixed(4)}𝐌\𝐒`;
+        const menuText = `𝖐𝖊𝖎𝖙𝖍 𝖘𝖕𝖊𝖊𝖉\n${Keithspeed.toFixed(4)} m/s`;
 
         // Send message with contextInfo and mention the sender
         await client.sendMessage(m.chat, {
@@ -26,5 +28,4 @@ async function handleMessageSpeed(context) {
         console.error("Error sending message:", error);
         m.reply('An error occurred while sending the menu.');
     }
-}
- 
+};
