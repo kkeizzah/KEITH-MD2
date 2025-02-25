@@ -1,7 +1,7 @@
 var gis = require('g-i-s');
 
 module.exports = async (context) => {
-    const { client, m, text, botname } = context;
+    const { client, m, text } = context;
 
     if (!text) return m.reply("Provide a text");
 
