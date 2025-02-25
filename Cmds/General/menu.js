@@ -2,7 +2,7 @@ const { DateTime } = require('luxon');
 const fs = require('fs');
 
 module.exports = async (context) => {
-    const { client, m, totalCommands, mode, botname, prefix } = context;
+    const { client, m } = context;
 
     try {
         const categories = [
