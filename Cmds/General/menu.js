@@ -1,9 +1,10 @@
 const { DateTime } = require('luxon');
 const fs = require('fs');
 const { mode, botname, prefix } = require(__dirname + "/../../settings");
+const { totalCommands } = require(__dirname + "/../../commandHandler");
 
 module.exports = async (context) => {
-    const { client, m, totalCommands } = context;
+    const { client, m } = context;
 
     try {
         const categories = [
