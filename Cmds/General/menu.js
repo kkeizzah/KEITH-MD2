@@ -2,7 +2,7 @@ const { DateTime } = require('luxon');
 const fs = require('fs');
 
 module.exports = async (context) => {
-    const { client, m } = context;
+    const { client, m, totalCommands, mode, botname, prefix } = context;
 
     try {
         const categories = [
@@ -14,7 +14,6 @@ module.exports = async (context) => {
             { name: 'Groups', emoji: '」' },
             { name: 'Fun', emoji: '」' },
             { name: 'Owner', emoji: '」' },
-            { name: 'Logo', emoji: '」' },
             { name: 'Coding', emoji: '」' },
             { name: 'Stalk', emoji: '」' }
         ];
@@ -162,6 +161,6 @@ module.exports = async (context) => {
 
     } catch (error) {
         console.error("Error:", error);
-        m.reply('An unexpected error occurred while generating the menu.');
+        m.reply('An unexpected error occurred while generating the menu.' + error);
     }
 };
