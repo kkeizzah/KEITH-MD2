@@ -1,8 +1,9 @@
+const speed = require("performance-now");
+
 module.exports = async (context) => {
     const { client, m } = context;
 
-    // Assuming 'speed' is a function that returns the current timestamp or a similar value.
-    const speed = () => new Date().getTime();  // Example of a simple speed function (current timestamp in ms)
+    // Get the current timestamp and calculate Keith's speed
     const timestamp = speed();
     const Keithspeed = speed() - timestamp;
 
