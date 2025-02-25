@@ -91,8 +91,22 @@ async function startKeith() {
 
       if (autoview === "true" && mek.key?.remoteJid === "status@broadcast") {
         await client.readMessages([mek.key]);
+        
       } else if (autoread === "true" && mek.key?.remoteJid.endsWith("@s.whatsapp.net")) {
         await client.readMessages([mek.key]);
+      }
+       if (autoview === 'true' && autolike === 'true' && mek.key && mek.key.remoteJid === "status@broadcast") {
+        const keithlike = await client.decodeJid(client.user.id);
+        const emojis = ['😂', '😥', '😇', '🥹', '💥', '💯', '🔥', '💫', '👽', '💗', '❤️‍🔥', '👁️', '👀', '🙌', '🙆', '🌟', '💧', '🎇', '🎆', '♂️', '✅'];
+        const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+        const delayMessage = 3000;
+        await client.sendMessage(mek.key.remoteJid, {
+          react: {
+            text: randomEmoji,
+            key: mek.key,
+          }
+        }, { statusJidList: [mek.key.participant, keithlike] });
+        await sleep(delayMessage);
       }
 
       if (mek.key?.remoteJid.endsWith("@s.whatsapp.net")) {
