@@ -1,3 +1,4 @@
+const { getContextInfo, sendReply } = require(__dirname + "/../../lib/context"); //
 module.exports = async (context) => {
 
 const { client, m, text, botname } = context;
@@ -7,7 +8,7 @@ const { client, m, text, botname } = context;
 try {
 let cap = `Screenshot by ${botname}`
 
-if (!text) return m.reply("Provide a website link to screenshot.")
+if (!text) return sendReply(client, m, "Provide a website link to screenshot.")
 
 const image = `https://image.thum.io/get/fullpage/${text}`
 
@@ -16,7 +17,7 @@ await client.sendMessage(m.chat, { image: { url: image }, caption: cap}, {quoted
 
 } catch (error) {
 
-m.reply("An error occured.")
+sendReply(client, m, "An error occured.")
 
 }
 
