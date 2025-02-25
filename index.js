@@ -194,13 +194,6 @@ async function startKeith() {
 
       const IsGroup = m.chat?.endsWith("@g.us");
 
-      const context = {
-        client, m, text, isBotMessage, message, Owner, chatUpdate, store, isBotAdmin, isAdmin, IsGroup,
-        participants, pushname, body, budy, totalCommands, args, mime, qmsg, msgKeith, botNumber, itsMe, packname,
-        author, generateProfilePicture, groupMetadata, Keithspeed, mycode, fetchJson, exec, antibad, getRandom, UploadFileUgu,
-        TelegraPh, prefix, cmd, botname, mode, gcpresence, antibot, permit, antitag, antilink, antidelete, antionce, fetchBuffer,
-        store, uploadtoimgur, chatUpdate, ytmp3, getGroupAdmins, Tag
-      };
 
       // Antilink Logic
       const forbiddenLinkPattern = /https?:\/\/[^\s]+/;
