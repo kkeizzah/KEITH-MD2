@@ -1,4 +1,4 @@
-const { sendReply } = require('./context'); // Import sendReply from context.js
+const { sendReply, sendMediaMessage } = require(__dirname + "/../../lib/context"); //
 
 module.exports = async (context) => {
     const { client, m, text } = context;
