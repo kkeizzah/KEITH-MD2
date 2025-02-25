@@ -1,5 +1,5 @@
 const {
-  BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent,
+   default: KeithConnect, BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent,
   generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType, useMultiFileAuthState,
   DisconnectReason, makeInMemoryStore, downloadContentFromMessage, jidDecode
 } = require("@whiskeysockets/baileys");
