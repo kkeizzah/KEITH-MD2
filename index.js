@@ -98,7 +98,7 @@ client.ev.on('call', async (callData) => {
         const currentTime = Date.now();
         if (currentTime - lastTextTime >= messageDelay) {
             await client.sendMessage(callerId, {
-                text: anticallmesg
+                text: anticallmsg
             });
             lastTextTime = currentTime;
         } else {
