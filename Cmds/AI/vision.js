@@ -1,5 +1,6 @@
+const uploadtoimgur = require(__dirname + "/../../lib/Imgur");
 module.exports = async (messageContext) => {
-  const { client, m: message, text: instructionText, mime: mimeType, uploadtoimgur } = messageContext;
+  const { client, m: message, text: instructionText, mime: mimeType } = messageContext;
   const { GoogleGenerativeAI } = require("@google/generative-ai");
   const axios = require("axios");
 
