@@ -1,5 +1,5 @@
 module.exports = async (context) => {
-    const { client, m, Keithspeed } = context;
+    const { client, m } = context;
 
     try {
         // Prepare the response text with speed data
