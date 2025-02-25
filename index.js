@@ -37,7 +37,7 @@ const authenticationn = require("./auth.js");
 const daddy = "254748387615@s.whatsapp.net";
 
 const {
-  autoview, autoread, botname, autobio, mode, reactemoji, prefix, presence,
+  autoview, autoread, botname, autobio, mode, anticallmsg, reactemoji, prefix, presence,
   mycode, author, antibad, packname, dev, antilink, gcpresence, antionce, antitag, antidelete, autolike,
 } = require("./settings");
 
@@ -82,6 +82,31 @@ async function startKeith() {
       );
     }, 10 * 1000);
   }
+  
+let lastTextTime = 0;
+const messageDelay = 5000;
+
+// Handle incoming calls if anticall is enabled
+client.ev.on('call', async (callData) => {
+    if (anticall === 'true') {
+        const callId = callData[0].id;
+        const callerId = callData[0].from;
+
+        // Reject the call
+        await client.rejectCall(callId, callerId);
+
+        const currentTime = Date.now();
+        if (currentTime - lastTextTime >= messageDelay) {
+            await client.sendMessage(callerId, {
+                text: anticallmesg
+            });
+            lastTextTime = currentTime;
+        } else {
+            console.log('Message skipped to prevent overflow');
+        }
+    }
+});
+
 
   client.ev.on("messages.upsert", async (chatUpdate) => {
     try {
