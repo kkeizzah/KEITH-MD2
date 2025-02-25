@@ -1,5 +1,7 @@
+
 const ytSearch = require('yt-search');
 const fetch = require('node-fetch');
+const { sendReply, sendMediaMessage } = require(__dirname + "/../../lib/context"); // Import functions from context.js
 
 module.exports = async (messageDetails) => {
   const { client, m: message, text: query } = messageDetails;
@@ -14,7 +16,7 @@ module.exports = async (messageDetails) => {
   try {
     // Check if query is provided
     if (!query || query.trim().length === 0) {
-      return message.reply('Please provide a song to download.');
+      return sendReply(client, message, 'Please provide a song to download.'); // Use sendReply for text replies
     }
 
     // Perform a YouTube search based on the query
@@ -22,7 +24,7 @@ module.exports = async (messageDetails) => {
 
     // Check if any videos were found
     if (!searchResults || !searchResults.videos.length) {
-      return message.reply('No video found for the specified query.');
+      return sendReply(client, message, 'No video found for the specified query.'); // Use sendReply for text replies
     }
 
     const firstVideo = searchResults.videos[0];
@@ -34,7 +36,7 @@ module.exports = async (messageDetails) => {
     let videoDetails;
 
     // Try Gifted API
-    downloadData = await getDownloadData(`https://api.giftedtech.web.id/api/download/dlmp3?url=${encodeURIComponent(videoUrl)}&apikey=gifted`);
+    downloadData = await getDownloadData(`https://api.giftedtech.web.id/api/download/ytmp3?url=${encodeURIComponent(videoUrl)}&apikey=gifted`);
     if (downloadData.success) {
       downloadUrl = downloadData.result.download_url;
       videoDetails = downloadData.result;
@@ -56,7 +58,7 @@ module.exports = async (messageDetails) => {
 
     // Check if a valid download URL was found
     if (!downloadUrl || !videoDetails) {
-      return message.reply('Failed to retrieve download URL from all sources. Please try again later.');
+      return sendReply(client, message, 'Failed to retrieve download URL from all sources. Please try again later.'); // Use sendReply for text replies
     }
 
     // Prepare the message payload with external ad details
@@ -76,11 +78,11 @@ module.exports = async (messageDetails) => {
       },
     };
 
-    // Send the download link to the user
-    await client.sendMessage(chatId, messagePayload, { quoted: message });
+    // Send the download link to the user with contextInfo
+    await sendMediaMessage(client, message, messagePayload);
 
   } catch (error) {
     console.error('Error during download process:', error);
-    return message.reply(`Download failed due to an error: ${error.message || error}`);
+    return sendReply(client, message, `Download failed due to an error: ${error.message || error}`); // Use sendReply for error messages
   }
-};
+};// Import functions from context.js
