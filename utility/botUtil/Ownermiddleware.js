@@ -1,9 +1,9 @@
 
 
 const Ownermiddleware = async (context, next) => {
-    const { m, Owner } = context;
+    const { m, isOwner } = context;
 
-    if (!Owner) {
+    if (!isOwner) {
         return m.reply("You need owner privileges to execute this command.");
     }
 
