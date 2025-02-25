@@ -1,31 +1,38 @@
+const yts = require("yt-search");
+const { sendReply, sendMediaMessage } = require(__dirname + "/../../lib/context"); // 
+
 module.exports = async (context) => {
-    const { client, m, text } = context; // Removed duplicate 'm'
-    const yts = require("yt-search");
+    const { client, m, text } = context;
 
     try {
+        // Check if text is provided
         if (!text) {
-            return m.reply("Please provide a media query.");
+            return sendReply(client, m, "Please provide a media query."); // Use sendReply for text replies
         }
 
+        // Search for YouTube videos
         const info = await yts(text);
         const results = info.videos;
 
+        // Check if results are found
         if (!results.length) {
-            return m.reply("No results found.");
+            return sendReply(client, m, "No results found."); // Use sendReply for text replies
         }
 
+        // Build the captions for the results
         let captions = "";
         for (let i = 0; i < Math.min(results.length, 10); i++) {
             captions += `----------------\nTitle: ${results[i].title}\nTime: ${results[i].timestamp}\nUrl: ${results[i].url}\n`;
         }
         captions += "\n======\n*Powered by KEITH-MD*";
 
-        await client.sendMessage(m.chat, {
+        // Send the first result's thumbnail with captions
+        await sendMediaMessage(client, m, {
             image: { url: results[0].thumbnail },
             caption: captions
-        }, { quoted: m });
+        });
 
     } catch (error) {
-        m.reply(`Error: ${error.message}`); // Simplified error message
+        await sendReply(client, m, `Error: ${error.message}`); // Use sendReply for error messages
     }
 };
