@@ -1,3 +1,4 @@
+const { botname } = require(__dirname + "/../../settings");
 const speed = require("performance-now");
 
 // Function to create a delay
@@ -8,8 +9,8 @@ function delay(ms) {
 
 // Function to show loading animation
 async function loading(m, client) {
-  const loadingSymbols = ["💜", "♥️", "💖", "🖤", "💙", "💚"];
-  let { key } = await client.sendMessage(m.chat, { text: 'Loading, please wait...' });
+  const loadingSymbols = ["💜", "⚔️", "💖", "🖤", "💙", "💚"];
+  let { key } = await client.sendMessage(m.chat, { text: '*🇰🇪Enjoy...with Keith Md.....*' });
 
   // Run the loading animation without blocking the main code
   for (let i = 0; i < loadingSymbols.length; i++) {
@@ -35,8 +36,8 @@ module.exports = async (context) => {
       key: { fromMe: false, participant: `0@s.whatsapp.net`, remoteJid: 'status@broadcast' },
       message: {
         contactMessage: {
-          displayName: 'Keith',
-          vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;a,;;;\nFN:Keith\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
+          displayName: botname,
+          vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;a,;;;\nFN:${botname}\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
         },
       },
     };
