@@ -10,12 +10,12 @@ const middleware = async (context, next) => {
 
     // Check if the user is an admin
     if (!m.isAdmin) {
-        return sendReply(client, m, "You need admin privileges"); // Use sendReply for text replies
+        return sendReply(client, m, "You need admin privileges is admins"); // Use sendReply for text replies
     }
 
     // Check if the bot is an admin
     if (!m.isBotAdmin) {
-        return sendReply(client, m, "I need admin privileges"); // Use sendReply for text replies
+        return sendReply(client, m, "I need admin privileges is bot admin"); // Use sendReply for text replies
     }
 
     // Proceed to the next function (main handler)
