@@ -1,11 +1,7 @@
-const { sendReply, sendMediaMessage } = require(__dirname + "/../../lib/context"); //.
+const { sendReply } = require(__dirname + "/../../lib/context"); // Import sendReply from context.js
 
 const middleware = async (context, next) => {
-    const { m, isBotAdmin, client, isAdmin, participants, botNumber } = context;
-
-    // Get group admins if the message is from a group
-    const groupAdmin = m.isGroup ? getGroupAdmins(participants) : [];
-    const isBotAdmin = m.isGroup ? groupAdmin.includes(botNumber) : false;
+    const { m, isBotAdmin, client, isAdmin } = context;
 
     // Check if the message is from a group
     if (!m.isGroup) {
