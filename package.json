@@ -22,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "@whiskeysockets/baileys": "npm:@fizzxydev/baileys-pro@8.5.12",
+    "baileys": "github: Kkeizzah/Bail",
     "@bochilteam/scraper": "^4.2.4",
     "@distube/ytdl-core": "latest",
     "@adiwajshing/keyed-db": "^0.2.4",
