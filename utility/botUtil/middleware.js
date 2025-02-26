@@ -1,4 +1,4 @@
-const { sendReply } = require('./context'); // Import sendReply from context.js
+const { sendReply, sendMediaMessage } = require(__dirname + "/../../lib/context"); //.
 
 const middleware = async (context, next) => {
     const { m, isBotAdmin, client, isAdmin, participants, botNumber } = context;
