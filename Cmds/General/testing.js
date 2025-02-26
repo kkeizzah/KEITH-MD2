@@ -1,4 +1,3 @@
-const { default: makeWASocket } = require("baileys");
 
 module.exports = async (context) => {
   const { client, m } = context;
