@@ -1,13 +1,14 @@
 const events = process.env.EVENTS || 'false';
 const botname = process.env.BOTNAME || 'KEITH-MD';
 
-const Events = async (client, Fortu) => {
+const Events = async (client, keizzah) => {
     const Myself = await client.decodeJid(client.user.id);
 
     try {
-        let metadata = await client.groupMetadata(Fortu.id);
-        let participants = Fortu.participants;
+        let metadata = await client.groupMetadata(keizzah.id);
+        let participants = keizzah.participants;
         let desc = metadata.desc || "No Description";
+        let groupMembersCount = metadata.participants.length; // Get the total number of group members
 
         for (let num of participants) {
             let dpuser;
@@ -18,43 +19,42 @@ const Events = async (client, Fortu) => {
                 dpuser = "https://i.imgur.com/iEWHnOH.jpeg";
             }
 
-            if (Fortu.action == "add") {
+            if (keizzah.action === "add") {
                 let userName = num;
 
-                let Welcometext = ` Hey  @${userName.split("@")[0]} 👋\n\nWelcome to ${metadata.subject}.\n\nyou may read the group Description to avoid being removed  ${desc}\n\n*Regards keithkeizzah*.\n\nPowered by ${botname} .`;
+                let Welcometext = `Hey @${userName.split("@")[0]} 👋\n\nWelcome to ${metadata.subject}.\n\nYou are now ${groupMembersCount} members in this group.\n\nPlease read the group description to avoid being removed:\n${desc}\n\n*Regards keithkeizzah*.\n\nPowered by ${botname}.`;
                 if (events === 'true') {
-                    await client.sendMessage(Fortu.id, {
+                    await client.sendMessage(keizzah.id, {
                         image: { url: dpuser },
                         caption: Welcometext,
                         mentions: [num],
                     });
                 }
-            } else if (Fortu.action == "remove") {
+            } else if (keizzah.action === "remove") {
                 let userName2 = num;
 
-                let Lefttext = `
-          Goodbye to this idiot @${userName2.split("@")[0]} you will be highly remembered comrade`;
+                let Lefttext = `Goodbye to @${userName2.split("@")[0]}! You will be remembered. We are now ${groupMembersCount} members in this group.`;
                 if (events === 'true') {
-                    await client.sendMessage(Fortu.id, {
+                    await client.sendMessage(keizzah.id, {
                         image: { url: dpuser },
                         caption: Lefttext,
                         mentions: [num],
                     });
                 }
-            } else if (Fortu.action == "demote" && events === 'true') {
+            } else if (keizzah.action === "demote" && events === 'true') {
                 await client.sendMessage(
-                    Fortu.id,
+                    keizzah.id,
                     {
-                        text: `@${(Fortu.author).split("@")[0]}, has demoted @${(Fortu.participants[0]).split("@")[0]} from admin 👀`,
-                        mentions: [Fortu.author, Fortu.participants[0]]
+                        text: `@${(keizzah.author).split("@")[0]}, has demoted @${(keizzah.participants[0]).split("@")[0]} from admin 👀`,
+                        mentions: [keizzah.author, keizzah.participants[0]]
                     }
                 );
-            } else if (Fortu.action == "promote" && events === 'true') {
+            } else if (keizzah.action === "promote" && events === 'true') {
                 await client.sendMessage(
-                    Fortu.id,
+                    keizzah.id,
                     {
-                        text: `@${(Fortu.author).split("@")[0]} has promoted @${(Fortu.participants[0]).split("@")[0]} to admin. 👀`,
-                        mentions: [Fortu.author, Fortu.participants[0]]
+                        text: `@${(keizzah.author).split("@")[0]} has promoted @${(keizzah.participants[0]).split("@")[0]} to admin. 👀`,
+                        mentions: [keizzah.author, keizzah.participants[0]]
                     }
                 );
             }
