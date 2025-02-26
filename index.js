@@ -281,7 +281,7 @@ async function startKeith() {
       if (command) {
         const commandObj = commands[command];
         if (commandObj) {
-          await commandObj.execute({ client, m, text, args, isOwner, pushname, botNumber, itsMe, store });
+          await commandObj.execute({ client, m, text, args, isOwner, pushname, botNumber, itsMe, store, isAdmin, isBotAdmin });
         }
       }
     } catch (err) {
