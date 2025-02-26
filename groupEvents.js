@@ -1,6 +1,6 @@
 const events = process.env.EVENTS || 'false';
 const botname = process.env.BOTNAME || 'KEITH-MD';
-const { sendReply, sendMediaMessage } = require(__dirname + "/../lib/context"); // Adjusted path to context.js
+const { sendReply, sendMediaMessage } = require("./lib/context");
 
 
 const Events = async (client, keizzah) => {
