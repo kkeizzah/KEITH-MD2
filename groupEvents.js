@@ -25,35 +25,35 @@ const Events = async (client, keizzah) => {
 
         for (let num of participants) {
             let dpuser;
-            let userName = num; // Default to JID for the userName
-            let contactName = userName;
 
             try {
                 dpuser = await client.profilePictureUrl(num, "image");
-                let contact = await client.getContact(num);
-                contactName = contact.pushname || contact.notify || userName.split('@')[0]; // Try to use the pushname or notify, fallback to the JID part if both are unavailable
             } catch {
-                dpuser = "https://i.imgur.com/iEWHnOH.jpeg"; // Default image if profile picture is not available
+                dpuser = "https://i.imgur.com/iEWHnOH.jpeg";
             }
 
             if (keizzah.action === "add") {
-                let Welcometext = `Hey @${contactName} 👋\n\nWelcome to ${metadata.subject}.\n\nYou are now ${groupMembersCount} members in this group.\n\nPlease read the group description to avoid being removed:\n${desc}\n\n*Regards keithkeizzah*.\n\nPowered by ${botname}.`;
+                let userName = num;
+
+                let Welcometext = `Hey @${userName.split("@")[0]} 👋\n\nWelcome to ${metadata.subject}.\n\nYou are now ${groupMembersCount} members in this group🙏.\n\nPlease read the group description to avoid being removed:\n${desc}\n\n*Regards keithkeizzah*.\n\nPowered by ${botname}.`;
                 if (events === 'true') {
                     await client.sendMessage(keizzah.id, {
                         image: { url: dpuser },
                         caption: Welcometext,
                         mentions: [num],
-                        contextInfo: getContextInfo({ sender: Myself })
+                        contextInfo: getContextInfo({sender: Myself})
                     });
                 }
             } else if (keizzah.action === "remove") {
-                let Lefttext = `Goodbye to @${contactName}! You will be remembered. We are now ${groupMembersCount} members in this group.`;
+                let userName2 = num;
+
+                let Lefttext = `Goodbye to this idiot another fallen soldier @${userName2.split("@")[0]}!You will be remembered. We are now ${groupMembersCount} members in this group😭.`;
                 if (events === 'true') {
                     await client.sendMessage(keizzah.id, {
                         image: { url: dpuser },
                         caption: Lefttext,
                         mentions: [num],
-                        contextInfo: getContextInfo({ sender: Myself })
+                        contextInfo: getContextInfo({sender: Myself})
                     });
                 }
             } else if (keizzah.action === "demote" && events === 'true') {
@@ -62,7 +62,7 @@ const Events = async (client, keizzah) => {
                     {
                         text: `@${(keizzah.author).split("@")[0]}, has demoted @${(keizzah.participants[0]).split("@")[0]} from admin 👀`,
                         mentions: [keizzah.author, keizzah.participants[0]],
-                        contextInfo: getContextInfo({ sender: Myself })
+                        contextInfo: getContextInfo({sender: Myself})
                     }
                 );
             } else if (keizzah.action === "promote" && events === 'true') {
@@ -71,7 +71,7 @@ const Events = async (client, keizzah) => {
                     {
                         text: `@${(keizzah.author).split("@")[0]} has promoted @${(keizzah.participants[0]).split("@")[0]} to admin. 👀`,
                         mentions: [keizzah.author, keizzah.participants[0]],
-                        contextInfo: getContextInfo({ sender: Myself })
+                        contextInfo: getContextInfo({sender: Myself})
                     }
                 );
             }
