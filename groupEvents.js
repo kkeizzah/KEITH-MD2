@@ -1,6 +1,7 @@
 const events = process.env.EVENTS || 'false';
 const botname = process.env.BOTNAME || 'KEITH-MD';
-const { sendReply, sendMediaMessage } = require(__dirname + "/../../lib/context"); // Import functions from context.js
+const { sendReply, sendMediaMessage } = require(__dirname + "/../lib/context"); // Adjusted path to context.js
+
 
 const Events = async (client, keizzah) => {
     const Myself = await client.decodeJid(client.user.id);
