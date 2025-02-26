@@ -1,19 +1,29 @@
-
+const { sendReply } = require('./context'); // Import sendReply from context.js
 
 const middleware = async (context, next) => {
-    const { m, isBotAdmin, isAdmin } = context;
+    const { m, isBotAdmin, client, isAdmin, participants, botNumber } = context;
 
+    // Get group admins if the message is from a group
+    const groupAdmin = m.isGroup ? getGroupAdmins(participants) : [];
+    const isBotAdmin = m.isGroup ? groupAdmin.includes(botNumber) : false;
+
+    // Check if the message is from a group
     if (!m.isGroup) {
-        return m.reply("This command is meant for groups");
-    }
-    if (!isAdmin) {
-        return m.reply("You need admin privileges");
-    }
-    if (!isBotAdmin) {
-        return m.reply("I need admin privileges");
+        return sendReply(client, m, "This command is meant for groups"); // Use sendReply for text replies
     }
 
-    await next(); // Proceed to the next function (main handler)
+    // Check if the user is an admin
+    if (!isAdmin) {
+        return sendReply(client, m, "You need admin privileges"); // Use sendReply for text replies
+    }
+
+    // Check if the bot is an admin
+    if (!isBotAdmin) {
+        return sendReply(client, m, "I need admin privileges"); // Use sendReply for text replies
+    }
+
+    // Proceed to the next function (main handler)
+    await next();
 };
 
 module.exports = middleware;
