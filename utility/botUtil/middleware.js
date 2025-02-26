@@ -1,7 +1,7 @@
 const { sendReply } = require(__dirname + "/../../lib/context"); // Import sendReply from context.js
 
 const middleware = async (context, next) => {
-    const { m, isBotAdmin, client, isAdmin } = context;
+    const { m, client } = context;
 
     // Check if the message is from a group
     if (!m.isGroup) {
@@ -9,12 +9,12 @@ const middleware = async (context, next) => {
     }
 
     // Check if the user is an admin
-    if (!isAdmin) {
+    if (!m.isAdmin) {
         return sendReply(client, m, "You need admin privileges"); // Use sendReply for text replies
     }
 
     // Check if the bot is an admin
-    if (!isBotAdmin) {
+    if (!m.isBotAdmin) {
         return sendReply(client, m, "I need admin privileges"); // Use sendReply for text replies
     }
 
