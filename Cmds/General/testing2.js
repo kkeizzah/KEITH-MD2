@@ -74,7 +74,7 @@ module.exports = async (context) => {
     contextInfo: {
       isForwarded: true,
       forwardedNewsletterMessageInfo: {
-        newsletterJid: '120363357312070270@newsletter',
+        newsletterJid: '120363266249040649@newsletter',
         newsletterName: 'Keith Support',
       },
       externalAdReply: {
