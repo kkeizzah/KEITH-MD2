@@ -1,6 +1,5 @@
-
 module.exports = async (context) => {
-  const { client, m } = context;
+  const { client, m, prefix } = context; // Destructure 'm' and 'prefix' properly
 
   // Define the message content
   let p = `
@@ -19,16 +18,16 @@ My info:
   // Define the buttons
   const buttons = [
     {
-      buttonId: ".support",
-      buttonText: { displayText: "support" },
+      buttonId: `${prefix}support`, // Corrected buttonId with proper interpolation
+      buttonText: { displayText: "Support" },
     },
     {
-      buttonId: ".repo",
-      buttonText: { displayText: "repo" },
+      buttonId: `${prefix}repo`, // Corrected buttonId with proper interpolation
+      buttonText: { displayText: "Repo" },
     },
     {
-      buttonId: ".ping",
-      buttonText: { displayText: "speed" },
+      buttonId: `${prefix}ping`, // Corrected buttonId with proper interpolation
+      buttonText: { displayText: "Speed" },
     },
   ];
 
@@ -49,15 +48,15 @@ My info:
               rows: [
                 {
                   header: "Keith",
-                  title: "md",
-                  description: "regards keith",
-                  id: ".menu",
+                  title: "MD",
+                  description: "Regards Keith",
+                  id: `${prefix}menu`, // Corrected buttonId with proper interpolation
                 },
                 {
                   header: "KEITH MD",
                   title: "Appreciation",
-                  description: "regards to the owner",
-                  id: ".speed",
+                  description: "Regards to the owner",
+                  id: `${prefix}speed`, // Corrected buttonId with proper interpolation
                 },
               ],
             },
@@ -72,7 +71,7 @@ My info:
   const buttonMessage = {
     image: { url: imagePath },
     caption: p,
-    footer: "© keith\n",
+    footer: "© Keith\n",
     headerType: 1,
     buttons: buttons,
     viewOnce: true,
@@ -80,11 +79,11 @@ My info:
       isForwarded: true,
       forwardedNewsletterMessageInfo: {
         newsletterJid: '120363357312070270@newsletter',
-        newsletterName: '𝐒𝐈𝐋𝐄𝐍𝐂𝐄𝐑 𝐂𝐑𝐀𝐒𝐇𝐄𝐑',
+        newsletterName: 'Keith Support',
       },
       externalAdReply: {
-        title: "Keith testing ",
-        body: "keith",
+        title: "Keith Testing",
+        body: "Keith",
         thumbnailUrl: `https://files.catbox.moe/12t71b.jpg`,
         sourceUrl: "https://whatsapp.com/channel/0029Vaan9TF9Bb62l8wpoD47",
         mediaType: 1,
