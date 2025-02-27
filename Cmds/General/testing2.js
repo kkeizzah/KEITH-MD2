@@ -3,13 +3,9 @@ module.exports = async (context) => {
 
   // Define the message content
   let p = `
-Hi, I am an automated system (WhatsApp bot) . I am here to help you eliminate all your WhatsApp enemies.
 
-My info:
- ▢ Bot Name: Silencer Crasher
- ▢ Status: Public
- ▢ Username: @${m.sender.split('@')[0]}
- ▢ Version: One
+  @${m.sender.split('@')[0]}
+ Testing...
   `;
 
   // Define the image URL
